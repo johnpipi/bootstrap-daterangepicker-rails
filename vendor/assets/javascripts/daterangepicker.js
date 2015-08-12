@@ -129,7 +129,7 @@
 
             this.startDate = moment().startOf('day');
             this.endDate = moment().endOf('day');
-            this.tim.utcOffset = moment().utcOffset();
+            this.timeZone = moment().utcOffset();
             this.minDate = false;
             this.maxDate = false;
             this.dateLimit = false;
@@ -323,13 +323,13 @@
                 }
             }
 
-            // bind the time.utcOffset used to build the calendar to either the tim.utcOffset passed in through the options or the.utcOffset of the startDate (which will be the local time.utcOffset by default)
-            if (typeof options.tim.utcOffset === 'string' || typeof options.tim.utcOffset === 'number') {
-                this.tim.utcOffset = options.tim.utcOffset;
-                this.startDate.utcOffset(this.tim.utcOffset);
-                this.endDate.utcOffset(this.tim.utcOffset);
+            // bind the time zone used to build the calendar to either the timeZone passed in through the options or the zone of the startDate (which will be the local time zone by default)
+            if (typeof options.timeZone === 'string' || typeof options.timeZone === 'number') {
+                this.timeZone = options.timeZone;
+                this.startDate.utcOffset(this.timeZone);
+                this.endDate.utcOffset(this.timeZone);
             } else {
-                this.tim.utcOffset = moment(this.startDate).utcOffset();
+                this.timeZone = moment(this.startDate).utcOffset();
             }
 
             if (typeof options.ranges === 'object') {
@@ -447,7 +447,7 @@
 
         setStartDate: function(startDate) {
             if (typeof startDate === 'string')
-                this.startDate = moment(startDate, this.format).utcOffset(this.tim.utcOffset);
+                this.startDate = moment(startDate, this.format).utcOffset(this.timeZone);
 
             if (typeof startDate === 'object')
                 this.startDate = moment(startDate);
@@ -464,7 +464,7 @@
 
         setEndDate: function(endDate) {
             if (typeof endDate === 'string')
-                this.endDate = moment(endDate, this.format).utcOffset(this.tim.utcOffset);
+                this.endDate = moment(endDate, this.format).utcOffset(this.timeZone);
 
             if (typeof endDate === 'object')
                 this.endDate = moment(endDate);
@@ -505,12 +505,12 @@
                 end = null;
 
             if(dateString.length === 2) {
-                start = moment(dateString[0], this.format).utcOffset(this.tim.utcOffset);
-                end = moment(dateString[1], this.format).utcOffset(this.tim.utcOffset);
+                start = moment(dateString[0], this.format).utcOffset(this.timeZone);
+                end = moment(dateString[1], this.format).utcOffset(this.timeZone);
             }
 
             if (this.singleDatePicker || start === null || end === null) {
-                start = moment(this.element.val(), this.format).utcOffset(this.tim.utcOffset);
+                start = moment(this.element.val(), this.format).utcOffset(this.timeZone);
                 end = start;
             }
 
@@ -959,7 +959,7 @@
             if (dayOfWeek == this.locale.firstDay)
                 startDay = daysInLastMonth - 6;
 
-            var curDate = moment([lastYear, lastMonth, startDay, 12, minute, second]).utcOffset(this.tim.utcOffset);
+            var curDate = moment([lastYear, lastMonth, startDay, 12, minute, second]).utcOffset(this.timeZone);
 
             var col, row;
             for (i = 0, col = 0, row = 0; i < 42; i++, col++, curDate = moment(curDate).add(24, 'hour')) {
